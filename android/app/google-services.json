@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "485596796138",
+    "firebase_url": "https://picturesque.firebaseio.com",
+    "project_id": "picturesque",
+    "storage_bucket": "picturesque.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:485596796138:android:c3a3418eaa6b3c17",
+        "android_client_info": {
+          "package_name": "com.github.sidky.picturesque"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "485596796138-pfoevem9hoar5f5g892if1csubj3hcr0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyzHePvwhhAR9ln9chTrt_JtX9v2awiso"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
