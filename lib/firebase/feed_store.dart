@@ -5,7 +5,7 @@ import 'package:picturesque/firebase/list_aggregator.dart';
 
 class FeedStore {
 
-  final List<String> _paths = ["bigpicture", "infocus"];
+  final List<String> _paths = ["bigpicture", "infocus", "inpicture"];
   final FirebaseApp _app;
   final ListAggregator _listAggregator = ListAggregator();
 
