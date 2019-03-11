@@ -5,12 +5,19 @@ import 'package:picturesque/model/feed.dart';
 
 class ListAggregator {
   List<FirebaseList> _lists = List();
+  List<StreamSubscription<ListUpdate>> _subscriptions = List();
   List<Feed> _feed = List();
 
   StreamController<List<Feed>> _onUpdated = StreamController.broadcast();
 
+  Stream<List<Feed>> get onUpdated => _onUpdated.stream;
+
   void addList(FirebaseList list) {
     this._lists.add(list);
+    StreamSubscription<ListUpdate> subscription = list.onChanged.listen((update) {
+      _buildFeed();
+    });
+    _subscriptions.add(subscription);
     _buildFeed();
   }
 
@@ -26,9 +33,14 @@ class ListAggregator {
     _onUpdated.add(feed);
   }
 
+  void update() {
+    _buildFeed();
+  }
+
   List<Feed> get feed => _feed;
 
   void finalize() {
+    this._subscriptions.forEach((s) => s.cancel());
     this._lists.forEach((l) => l.finalize());
     _onUpdated.close();
   }

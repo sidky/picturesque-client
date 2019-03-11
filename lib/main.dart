@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:picturesque/firebase/feed_store.dart';
 import 'package:picturesque/firebase/firebase_app.dart';
+import 'package:picturesque/ui/feed.dart';
 
 Future<void> main() async {
   var firebase = await FirebasePicturesqueApp.instance();
@@ -11,7 +11,7 @@ Future<void> main() async {
 
 class PicturesqueApp extends StatelessWidget {
 
-  FirebaseApp _app;
+  final FirebaseApp _app;
 
   PicturesqueApp(this._app);
 
@@ -27,10 +27,13 @@ class PicturesqueApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    initialize();
+    FeedStore store = FeedStore(this._app);
+    store.initialize().whenComplete(() {
+      print("Initialized feed store");
+    });
 
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Picturesque',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -43,7 +46,7 @@ class PicturesqueApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: FeedList(store),
     );
   }
 }

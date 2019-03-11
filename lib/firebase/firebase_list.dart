@@ -27,17 +27,17 @@ class FirebaseList {
     var ref = this._db.reference().child(this._path);
 
 
-    await ref.once().then((snapshot) {
-      Map values = snapshot.value;
-
-      List<Feed> items = List();
-      values.forEach((key, values) {
-        var feed = this._converter.convert(this._path, key, values);
-        items.add(feed);
-      });
-      this._feed.addAll(items);
-      this._onChanged.add(ListUpdate.INIT);
-    });
+//    await ref.once().then((snapshot) {
+//      Map values = snapshot.value;
+//
+//      List<Feed> items = List();
+//      values.forEach((key, values) {
+//        var feed = this._converter.convert(this._path, key, values);
+//        items.add(feed);
+//      });
+//      this._feed.addAll(items);
+//      this._onChanged.add(ListUpdate.INIT);
+//    });
 
     ref.onChildAdded.listen((e) {
       var snapshot = e.snapshot;

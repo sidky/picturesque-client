@@ -35,7 +35,11 @@ class FeedConverter {
 
   FeedImage convertImage(Map map) {
     var caption = map['caption'];
-    var image = map['image'];
+    String image = map['image'];
+    if (image.startsWith("//")) {
+      image = "https:" + image;
+    }
+    print("******************* URL: " + image);
     return FeedImage(caption, image);
   }
 }

@@ -24,6 +24,7 @@ class FeedStore {
       _listAggregator.addList(list);
       list.initialize();
     });
+    _listAggregator.update();
   }
 
   ListAggregator get aggregated => _listAggregator;
