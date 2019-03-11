@@ -20,7 +20,6 @@ class FeedConverter {
     var subHeader = map['subheader'];
     var updated = DateTime.fromMillisecondsSinceEpoch(map['updated']);
     var url = map['url'];
-    print(map['images']);
     var images = convertImageList(map['images']);
 
     return Feed(type, id, title, subHeader, updated, url, images);
@@ -39,7 +38,6 @@ class FeedConverter {
     if (image.startsWith("//")) {
       image = "https:" + image;
     }
-    print("******************* URL: " + image);
     return FeedImage(caption, image);
   }
 }

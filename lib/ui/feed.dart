@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:picturesque/firebase/feed_store.dart';
 import 'package:picturesque/model/feed.dart';
+import 'package:picturesque/ui/feed_photos.dart';
 
 class FeedListState extends State<FeedList>{
   bool _isLoading = true;
@@ -15,31 +16,51 @@ class FeedListState extends State<FeedList>{
 
   @override
   Widget build(BuildContext context) {
-    print("feed size: " + _feed.length.toString());
     return Scaffold(
-      appBar: AppBar(title: Text("Feed")),
-      body:     ListView.builder(
-        itemCount: _feed.length,
-        physics: AlwaysScrollableScrollPhysics(),
-        itemBuilder: (BuildContext ctx, int index) {
-          return _buildItem(_feed[index]);
-        },
-      )
-    );
+      appBar: AppBar(title: Text("Picturesque", style: TextStyle(color: Colors.white),), backgroundColor: Colors.black,),
+      body: ListView.builder(
+            itemCount: _feed.length + (_isLoading ? 1 : 0),
+            physics: AlwaysScrollableScrollPhysics(),
+            itemBuilder: (BuildContext ctx, int index) {
+              if (_isLoading && index == 0) {
+                return LinearProgressIndicator(value: null,);
+              }
+              if (_isLoading) {
+                index--;
+              }
+              return _buildItem(context, _feed[index]);
+            },
+          )
+      );
   }
 
-  Widget _buildItem(Feed feed) {
-    return SizedBox(
-      child: Stack(
-        children: <Widget>[
-          Image.network(feed.images[0].image),
-          Container(
-            alignment: Alignment.bottomLeft,
-            child: Text(feed.title),
-          )
-        ],
+  Widget _buildItem(BuildContext context, Feed feed) {
+    return GestureDetector(
+      child: SizedBox(
+        child: Stack(
+            alignment: AlignmentDirectional.bottomStart,
+            children: <Widget>[
+              Image.network(feed.images[0].image),
+              Container(
+                padding: EdgeInsets.all(10.0),
+                color: Color.fromARGB(0x80, 0xFF, 0xFF, 0xFF),
+                alignment: Alignment.bottomLeft,
+                child: Text(
+                    feed.title,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    )
+                ),
+              ),
+            ]),
       ),
-    );
+      onTap: () {
+        Navigator.push(
+            context, 
+            //MaterialPageRoute(builder: (context) => FeedSlideShow(feed))
+            MaterialPageRoute(builder: (context) => FeedPhotos(feed))
+        );
+      },);
   }
 
   void initialize() {
