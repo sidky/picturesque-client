@@ -35,32 +35,50 @@ class FeedListState extends State<FeedList>{
   }
 
   Widget _buildItem(BuildContext context, Feed feed) {
+    print(_feedStore.feedIconBackground(feed.type));
     return GestureDetector(
       child: SizedBox(
         child: Stack(
-            alignment: AlignmentDirectional.bottomStart,
-            children: <Widget>[
-              Image.network(feed.images[0].image),
-              Container(
+          children: <Widget>[
+            Image.network(feed.images[0].image),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
                 padding: EdgeInsets.all(10.0),
                 color: Color.fromARGB(0x80, 0xFF, 0xFF, 0xFF),
                 alignment: Alignment.bottomLeft,
                 child: Text(
                     feed.title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    )
+                    style: TextStyle(fontWeight: FontWeight.bold,)
                 ),
               ),
-            ]),
+            ),
+            Positioned(
+              left: 0,
+              top: 0,
+              child: Container(
+                width: 40,
+                height: 40,
+                margin: EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  color: _feedStore.feedIconBackground(feed.type),
+                  shape: BoxShape.circle
+                ),
+                child: Image.network(_feedStore.feedIcon(feed.type)),
+              ),
+            )
+          ],
+        )
       ),
       onTap: () {
         Navigator.push(
-            context, 
-            //MaterialPageRoute(builder: (context) => FeedSlideShow(feed))
-            MaterialPageRoute(builder: (context) => FeedPhotos(feed))
-        );
-      },);
+            context,
+            MaterialPageRoute(builder: (context) => FeedPhotos(feed)));
+        },
+    );
   }
 
   void initialize() {
@@ -95,6 +113,44 @@ class FeedListState extends State<FeedList>{
       this._isLoading = false;
     });
   }
+}
+
+enum FeedItemComponent {
+  icon, image, title
+}
+
+class FeedItemWidget extends MultiChildLayoutDelegate {
+  @override
+  void performLayout(Size size) {
+    print("***** PERFORM LAYOUT");
+    print(size);
+    Size imageSize = hasChild(FeedItemComponent.image)
+        ? layoutChild(FeedItemComponent.image, BoxConstraints.loose(size))
+        : Size(0, 0);
+    Size iconSize = hasChild(FeedItemComponent.icon)
+        ? layoutChild(FeedItemComponent.icon, BoxConstraints.tight(Size(35, 35)))
+        : Size(0, 0);
+    Size titleSize = hasChild(FeedItemComponent.title)
+        ? layoutChild(FeedItemComponent.title, BoxConstraints.tight(imageSize))
+        : Size(0, 0);
+    if (hasChild(FeedItemComponent.image)) {
+      positionChild(FeedItemComponent.image, Offset.zero);
+    }
+    if (hasChild(FeedItemComponent.icon)) {
+      positionChild(FeedItemComponent.icon, Offset.zero);
+    }
+    if (hasChild(FeedItemComponent.title)) {
+      positionChild(FeedItemComponent.title, Offset(0, imageSize.height - titleSize.height));
+    }
+  }
+
+  @override
+  Size getSize(BoxConstraints constraints) {
+
+  }
+
+  @override
+  bool shouldRelayout(MultiChildLayoutDelegate oldDelegate) => true;
 }
 
 class FeedList extends StatefulWidget {
